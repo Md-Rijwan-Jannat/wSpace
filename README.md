@@ -1,15 +1,21 @@
 <div align="center">
 
-# 🚀 wSpace — Workspace Explorer
+<img src="https://res.cloudinary.com/dy3nttaso/image/upload/v1790090836/wSpace_hf4ap9.png" alt="wSpace Logo" width="180" />
+
+# wSpace — Workspace Explorer
 
 **A premium, browser-based file manager with multi-workspace support.**  
 Built with Next.js 16, React 19, TypeScript, and Tailwind CSS v4.
+
+<br/>
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.3.5-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-wSpace.vercel.app-00C7B7?style=flat-square&logo=vercel)](https://wspace-explorer.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-wspace--explorer.vercel.app-00C7B7?style=flat-square&logo=vercel)](https://wspace-explorer.vercel.app)
+
+<br/>
 
 ### 🌐 [Live Demo → https://wspace-explorer.vercel.app](https://wspace-explorer.vercel.app)
 
