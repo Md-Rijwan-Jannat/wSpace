@@ -110,7 +110,7 @@ export function getPathToRoot(
   let currentId: string | null = itemId;
 
   while (currentId) {
-    const item = state[currentId];
+    const item: WorkspaceItem | undefined = state[currentId];
     if (!item) break;
     path.unshift(item);
     currentId = item.parentId;
