@@ -35,9 +35,10 @@ export function WorkspaceCard({
   const [editName, setEditName] = useState(workspace.name);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const prevEditingRef = useRef(isEditing);
 
   useEffect(() => {
-    if (isEditing) {
+    if (isEditing && !prevEditingRef.current) {
       setEditName(workspace.name);
       setError(null);
       setTimeout(() => {
@@ -45,6 +46,7 @@ export function WorkspaceCard({
         inputRef.current?.select();
       }, 50);
     }
+    prevEditingRef.current = isEditing;
   }, [isEditing, workspace.name]);
 
   const handleSaveRename = (e?: React.MouseEvent | React.FormEvent) => {

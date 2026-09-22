@@ -21,7 +21,7 @@ import {
   getReadablePath,
   countDescendants,
 } from "@/src/lib/workspace-utils";
-import { WORKSPACE_DATA_PREFIX, LEGACY_STORAGE_KEY, DEBOUNCE_MS, getSeedData } from "@/src/lib/constants";
+import { LEGACY_STORAGE_KEY, DEBOUNCE_MS, getSeedData } from "@/src/lib/constants";
 
 // ---- Reducer ---------------------------------------------------------------
 

@@ -4,7 +4,7 @@
 
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { WorkspaceManagerProvider, useWorkspaceManagerContext } from "@/src/context/WorkspaceManagerContext";
 import { WorkspaceProvider } from "@/src/context/WorkspaceContext";
 import { ToastProvider } from "@/src/context/ToastContext";
@@ -17,17 +17,10 @@ import { useKeyboard } from "@/src/hooks/useKeyboard";
 
 function WorkspaceShell() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [createDialogType, setCreateDialogType] = useState<"folder" | "file">("folder");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    if (window.innerWidth < 1024) {
-      setSidebarCollapsed(true);
-    }
-  }, []);
 
   const handleSearchOpen = useCallback(() => {
     setSearchOpen(true);
@@ -55,6 +48,14 @@ function WorkspaceShell() {
     setSidebarCollapsed((prev) => !prev);
   }, []);
 
+  const handleMobileToggle = useCallback(() => {
+    setMobileOpen((prev) => !prev);
+  }, []);
+
+  const handleMobileClose = useCallback(() => {
+    setMobileOpen(false);
+  }, []);
+
   // Global keyboard shortcuts
   const shortcuts = useMemo(
     () => ({
@@ -70,20 +71,42 @@ function WorkspaceShell() {
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-surface">
-      {/* Sidebar */}
-      <Sidebar
-        isCollapsed={sidebarCollapsed}
-        onSearchOpen={handleSearchOpen}
-        onCreateFolder={handleCreateFolder}
-        onCreateFile={handleCreateFile}
-      />
+      {/* Desktop sidebar — always in layout, toggles collapsed */}
+      <div className="hidden lg:block">
+        <Sidebar
+          isCollapsed={sidebarCollapsed}
+          onSearchOpen={handleSearchOpen}
+          onCreateFolder={handleCreateFolder}
+          onCreateFile={handleCreateFile}
+        />
+      </div>
+
+      {/* Mobile sidebar — overlay, hidden by default */}
+      {mobileOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 flex">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/30 animate-fade-in"
+            onClick={handleMobileClose}
+          />
+          {/* Sidebar panel */}
+          <div className="relative z-10">
+            <Sidebar
+              isCollapsed={false}
+              onSearchOpen={handleSearchOpen}
+              onCreateFolder={handleCreateFolder}
+              onCreateFile={handleCreateFile}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Main area */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Main panel */}
         <MainPanel
           isCollapsed={sidebarCollapsed}
           onToggleCollapse={handleToggleSidebar}
+          onMobileToggle={handleMobileToggle}
           onCreateFolder={handleCreateFolder}
         />
       </div>

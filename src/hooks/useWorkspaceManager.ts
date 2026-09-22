@@ -2,7 +2,7 @@
 // useWorkspaceManager.ts — Multi-workspace management hook
 // ---------------------------------------------------------------------------
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 import type { WorkspaceMeta, WorkspaceRegistry } from "@/src/types/workspace";
 import {
   loadRegistry,
@@ -14,9 +14,7 @@ import {
   getWorkspaceItemCount,
 } from "@/src/lib/workspace-manager-utils";
 import {
-  DEFAULT_WORKSPACE_EMOJI,
   DEFAULT_WORKSPACE_COLOR,
-  DEFAULT_WORKSPACE_NAME,
 } from "@/src/lib/constants";
 
 export interface UseWorkspaceManagerReturn {
@@ -41,30 +39,8 @@ export interface UseWorkspaceManagerReturn {
   refreshItemCounts: () => void;
 }
 
-const INITIAL_WORKSPACE: WorkspaceMeta = {
-  id: "default-workspace",
-  name: DEFAULT_WORKSPACE_NAME,
-  color: DEFAULT_WORKSPACE_COLOR,
-  createdAt: 0,
-  updatedAt: 0,
-  itemCount: 0,
-};
-
-const INITIAL_REGISTRY: WorkspaceRegistry = {
-  workspaces: [INITIAL_WORKSPACE],
-  activeWorkspaceId: "default-workspace",
-};
-
 export function useWorkspaceManager(): UseWorkspaceManagerReturn {
-  const [registry, setRegistry] = useState<WorkspaceRegistry>(INITIAL_REGISTRY);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load / sync on mount
-  useEffect(() => {
-    const loaded = loadRegistry();
-    setRegistry(loaded);
-    setIsLoaded(true);
-  }, []);
+  const [registry, setRegistry] = useState<WorkspaceRegistry>(() => loadRegistry());
 
   const activeWorkspace = useMemo(() => {
     return (
@@ -225,7 +201,7 @@ export function useWorkspaceManager(): UseWorkspaceManagerReturn {
   }, []);
 
   return {
-    isLoaded,
+    isLoaded: true,
     registry,
     workspaces: registry.workspaces,
     activeWorkspace,

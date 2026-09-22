@@ -32,10 +32,10 @@ export function CreateWorkspaceDialog({
   const [error, setError] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const prevIsOpenRef = useRef(isOpen);
 
-  // Reset state and focus input when modal opens
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !prevIsOpenRef.current) {
       setName("");
       setSelectedColor(DEFAULT_WORKSPACE_COLOR);
       setError(null);
@@ -43,6 +43,7 @@ export function CreateWorkspaceDialog({
         inputRef.current?.focus();
       }, 50);
     }
+    prevIsOpenRef.current = isOpen;
   }, [isOpen]);
 
   // Handle ESC key

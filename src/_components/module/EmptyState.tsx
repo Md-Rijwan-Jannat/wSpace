@@ -2,7 +2,8 @@
 // EmptyState.tsx — Beautiful empty state with illustration
 // ---------------------------------------------------------------------------
 
-import { EmptyFolderIllustration, PlusIcon } from "@/src/_components/ui/icons/Icons";
+import Image from "next/image";
+import { PlusIcon } from "@/src/_components/ui/icons/Icons";
 
 interface EmptyStateProps {
   title: string;
@@ -14,7 +15,14 @@ interface EmptyStateProps {
 export function EmptyState({ title, description, actionLabel, onAction }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
-      <EmptyFolderIllustration size={120} className="mb-6 opacity-80" />
+      <Image
+        src="/images/file-create.png"
+        alt="Empty state illustration"
+        width={180}
+        height={180}
+        className="mb-2 opacity-90 w-[100px] h-[100px] sm:w-[140px] sm:h-[140px] lg:w-[180px] lg:h-[180px]"
+        priority
+      />
 
       <h3 className="text-lg font-semibold text-text-primary mb-2">{title}</h3>
 
