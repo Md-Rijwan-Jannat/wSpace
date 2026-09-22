@@ -21,7 +21,12 @@ import {
   getReadablePath,
   countDescendants,
 } from "@/src/lib/workspace-utils";
-import { LEGACY_STORAGE_KEY, DEBOUNCE_MS, getSeedData } from "@/src/lib/constants";
+import {
+  LEGACY_STORAGE_KEY,
+  WORKSPACE_DATA_PREFIX,
+  getSeedWorkspaceData,
+  getSeedData,
+} from "@/src/lib/constants";
 
 // ---- Reducer ---------------------------------------------------------------
 
@@ -107,68 +112,42 @@ export interface UseWorkspaceReturn {
 
 export function useWorkspace(storageKey?: string): UseWorkspaceReturn {
   const resolvedKey = storageKey || LEGACY_STORAGE_KEY;
-  const [items, dispatch] = useReducer(workspaceReducer, {});
+  const wsId = resolvedKey.replace(WORKSPACE_DATA_PREFIX, "");
+
+  const [items, dispatch] = useReducer(workspaceReducer, wsId, (id) => {
+    return id.startsWith("seed-ws-") ? getSeedWorkspaceData(id) : getSeedData();
+  });
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const [activeFileId, setActiveFileId] = useState<string | null>(null);
 
-  const isLoaded = useRef(false);
-  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isLoadedRef = useRef(false);
 
-  // We need useState imported
-  // It's already imported via useReducer's module, but let's be explicit
-  // Actually useReducer comes from react, let me fix the import
-
-  // ---- Load from localStorage on mount ------------------------------------
+  // Sync state from localStorage after mount (safe against SSR hydration mismatch)
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
     try {
       const stored = window.localStorage.getItem(resolvedKey);
       if (stored !== null) {
         const parsed = JSON.parse(stored) as WorkspaceState;
         if (parsed && typeof parsed === "object") {
           dispatch({ type: "LOAD", payload: parsed });
-          isLoaded.current = true;
-          return;
         }
       }
-    } catch {
-      console.warn("[useWorkspace] Failed to load from localStorage");
+    } catch (err) {
+      console.warn("[useWorkspace] Failed to load from localStorage", err);
     }
-
-    // First time (no stored entry at all) — use seed data
-    const seed = getSeedData();
-    dispatch({ type: "LOAD", payload: seed });
-    try {
-      window.localStorage.setItem(resolvedKey, JSON.stringify(seed));
-    } catch {
-      // Ignore
-    }
-    isLoaded.current = true;
+    isLoadedRef.current = true;
   }, [resolvedKey]);
 
-  // ---- Persist to localStorage on every state change ----------------------
+  // Persist to localStorage immediately on any state change after initial load
   useEffect(() => {
-    if (!isLoaded.current) return;
+    if (!isLoadedRef.current) return;
     if (typeof window === "undefined") return;
 
-    if (saveTimeoutRef.current) {
-      clearTimeout(saveTimeoutRef.current);
+    try {
+      window.localStorage.setItem(resolvedKey, JSON.stringify(items));
+    } catch {
+      console.warn("[useWorkspace] Failed to persist to localStorage");
     }
-
-    saveTimeoutRef.current = setTimeout(() => {
-      try {
-        window.localStorage.setItem(resolvedKey, JSON.stringify(items));
-      } catch {
-        console.warn("[useWorkspace] Failed to persist to localStorage");
-      }
-    }, DEBOUNCE_MS);
-
-    return () => {
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current);
-      }
-    };
   }, [items, resolvedKey]);
 
   // ---- Actions ------------------------------------------------------------

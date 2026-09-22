@@ -13,9 +13,10 @@ export function Breadcrumb() {
   const { activeWorkspace } = useWorkspaceManagerContext();
 
   return (
-    <nav className="flex items-center gap-1 text-[13px] min-h-[20px] flex-wrap">
+    <nav className="flex items-center gap-1 text-[13px] min-h-[20px] flex-nowrap whitespace-nowrap overflow-x-auto no-scrollbar py-0.5">
       {/* Root / Workspace */}
       <button
+        suppressHydrationWarning
         onClick={() => navigateToFolder(null)}
         className="
           flex items-center gap-1.5 px-1.5 py-0.5 rounded
@@ -25,13 +26,14 @@ export function Breadcrumb() {
         title={`Root (${activeWorkspace?.name || "Workspace"})`}
       >
         <span
+          suppressHydrationWarning
           className="w-2.5 h-2.5 rounded-full shrink-0 transition-transform group-hover:scale-125"
           style={{
             backgroundColor: activeWorkspace?.color || "#4c35ae",
             boxShadow: `0 0 5px ${activeWorkspace?.color || "#4c35ae"}80`,
           }}
         />
-        <span className="relative font-medium text-text-primary">
+        <span className="relative font-medium text-text-primary" suppressHydrationWarning>
           {activeWorkspace?.name || "Workspace"}
           <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-primary group-hover:w-full transition-all duration-150" />
         </span>

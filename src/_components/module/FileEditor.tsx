@@ -8,10 +8,20 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { useWorkspaceContext } from "@/src/context/WorkspaceContext";
 import { useToastContext } from "@/src/context/ToastContext";
 import { Modal } from "@/src/_components/ui/shared/Modal";
-import { ArrowLeftIcon, SaveIcon } from "@/src/_components/ui/icons/Icons";
+import {
+  ArrowLeftIcon,
+  SaveIcon,
+  SidebarToggleLeftIcon,
+  SidebarToggleRightIcon,
+} from "@/src/_components/ui/icons/Icons";
 import { resolveFileIcon } from "@/src/lib/icon-resolver";
 
-export function FileEditor() {
+interface FileEditorProps {
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
+}
+
+export function FileEditor({ isCollapsed, onToggleCollapse }: FileEditorProps = {}) {
   const { activeFileId, items, updateFileContent, closeFile } =
     useWorkspaceContext();
   const { showToast } = useToastContext();
@@ -87,7 +97,26 @@ export function FileEditor() {
     <>
       <div className="flex flex-col h-full">
         {/* Header bar */}
-        <div className="flex items-center h-[52px] px-4 shrink-0 border-b border-border bg-surface">
+        <div className="flex items-center h-[52px] px-3 sm:px-4 shrink-0 border-b border-border bg-surface gap-1.5">
+          {/* Collapse/Expand toggle */}
+          {onToggleCollapse && (
+            <button
+              onClick={onToggleCollapse}
+              className="
+                p-1.5 rounded-md text-text-muted hover:text-text-primary
+                hover:bg-surface-hover transition-colors
+              "
+              aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {isCollapsed ? (
+                <SidebarToggleRightIcon size={20} />
+              ) : (
+                <SidebarToggleLeftIcon size={20} />
+              )}
+            </button>
+          )}
+
           {/* Back button */}
           <button
             onClick={handleBack}

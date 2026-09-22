@@ -16,6 +16,7 @@ import {
 
 interface SidebarProps {
   isCollapsed: boolean;
+  onToggleCollapse?: () => void;
   onSearchOpen: () => void;
   onCreateFolder: () => void;
   onCreateFile: () => void;
@@ -48,7 +49,7 @@ export function Sidebar({
         className={`
           flex items-center h-[52px] shrink-0
           border-b border-border
-          ${isCollapsed ? "justify-center px-2" : "px-3.5"}
+          ${isCollapsed ? "justify-center px-2" : "px-3.5 justify-between"}
         `}
       >
         {/* Logo + text */}

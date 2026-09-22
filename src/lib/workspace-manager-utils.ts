@@ -6,10 +6,10 @@ import type { WorkspaceMeta, WorkspaceRegistry, WorkspaceState } from "@/src/typ
 import {
   WORKSPACE_REGISTRY_KEY,
   WORKSPACE_DATA_PREFIX,
-  LEGACY_STORAGE_KEY,
-  DEFAULT_WORKSPACE_NAME,
   DEFAULT_WORKSPACE_COLOR,
-  getSeedData,
+  SEED_INITIALIZED_KEY,
+  getSeedRegistry,
+  getSeedWorkspaceData,
 } from "@/src/lib/constants";
 
 /**
@@ -125,72 +125,67 @@ export function saveRegistry(registry: WorkspaceRegistry): void {
  */
 export function loadRegistry(): WorkspaceRegistry {
   if (typeof window === "undefined") {
-    const defaultMeta = createWorkspaceMeta(DEFAULT_WORKSPACE_NAME, DEFAULT_WORKSPACE_COLOR, 0);
-    return {
-      workspaces: [defaultMeta],
-      activeWorkspaceId: defaultMeta.id,
-    };
+    return getSeedRegistry();
   }
 
-  try {
-    const stored = window.localStorage.getItem(WORKSPACE_REGISTRY_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored) as WorkspaceRegistry;
-      if (parsed && Array.isArray(parsed.workspaces) && parsed.workspaces.length > 0) {
-        // Ensure activeWorkspaceId is valid
-        const activeExists = parsed.workspaces.some((ws) => ws.id === parsed.activeWorkspaceId);
-        if (!activeExists) {
-          parsed.activeWorkspaceId = parsed.workspaces[0].id;
+  const hasSeeded = window.localStorage.getItem(SEED_INITIALIZED_KEY);
+
+  // If already seeded previously, strictly load from localStorage so user edits/deletions persist
+  if (hasSeeded) {
+    try {
+      const stored = window.localStorage.getItem(WORKSPACE_REGISTRY_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored) as WorkspaceRegistry;
+        if (parsed && Array.isArray(parsed.workspaces) && parsed.workspaces.length > 0) {
+          // Ensure activeWorkspaceId is valid
+          const activeExists = parsed.workspaces.some((ws) => ws.id === parsed.activeWorkspaceId);
+          if (!activeExists) {
+            parsed.activeWorkspaceId = parsed.workspaces[0].id;
+          }
+          // Update item counts dynamically
+          parsed.workspaces = parsed.workspaces.map((ws) => ({
+            ...ws,
+            itemCount: getWorkspaceItemCount(ws.id),
+          }));
+          return parsed;
         }
-        // Update item counts dynamically
-        parsed.workspaces = parsed.workspaces.map((ws) => ({
-          ...ws,
-          itemCount: getWorkspaceItemCount(ws.id),
-        }));
-        return parsed;
+      }
+    } catch (err) {
+      console.warn("[loadRegistry] Failed to parse registry from localStorage", err);
+    }
+  }
+
+  // Not seeded yet (first time or initialization):
+  const seedRegistry = getSeedRegistry();
+
+  // Populate data for each seed workspace if not already present
+  for (const ws of seedRegistry.workspaces) {
+    const dataKey = getStorageKeyForWorkspace(ws.id);
+    if (window.localStorage.getItem(dataKey) === null) {
+      const seedItems = getSeedWorkspaceData(ws.id);
+      try {
+        window.localStorage.setItem(dataKey, JSON.stringify(seedItems));
+      } catch (err) {
+        console.warn(`[loadRegistry] Failed to seed data for ${ws.id}`, err);
       }
     }
-  } catch (err) {
-    console.warn("[loadRegistry] Failed to parse registry from localStorage", err);
   }
 
-  // Check for legacy migration
-  let initialData: WorkspaceState | null = null;
+  // Save the seed registry
+  saveRegistry(seedRegistry);
+
+  // Mark as seeded so dummy data is NEVER re-seeded again!
   try {
-    const legacy = window.localStorage.getItem(LEGACY_STORAGE_KEY);
-    if (legacy) {
-      initialData = JSON.parse(legacy) as WorkspaceState;
-    }
-  } catch {
-    // Ignore error
-  }
-
-  if (!initialData) {
-    initialData = getSeedData();
-  }
-
-  const initialCount = Object.keys(initialData).length;
-  const initialMeta = createWorkspaceMeta(
-    DEFAULT_WORKSPACE_NAME,
-    DEFAULT_WORKSPACE_COLOR,
-    initialCount
-  );
-
-  // Store workspace data under new key
-  try {
-    window.localStorage.setItem(
-      getStorageKeyForWorkspace(initialMeta.id),
-      JSON.stringify(initialData)
-    );
+    window.localStorage.setItem(SEED_INITIALIZED_KEY, "true");
   } catch (err) {
-    console.warn("[loadRegistry] Failed to seed initial workspace data", err);
+    console.warn("[loadRegistry] Failed to set seed marker", err);
   }
 
-  const newRegistry: WorkspaceRegistry = {
-    workspaces: [initialMeta],
-    activeWorkspaceId: initialMeta.id,
-  };
+  // Update item counts dynamically
+  seedRegistry.workspaces = seedRegistry.workspaces.map((ws) => ({
+    ...ws,
+    itemCount: getWorkspaceItemCount(ws.id),
+  }));
 
-  saveRegistry(newRegistry);
-  return newRegistry;
+  return seedRegistry;
 }
