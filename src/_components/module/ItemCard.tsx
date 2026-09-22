@@ -119,14 +119,14 @@ export function ItemCard({ item }: ItemCardProps) {
               title="Rename"
               aria-label="Rename"
               className="
-                flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium
+                flex items-center gap-1.5 px-1 sm:px-2 py-1 rounded-md text-[11px] font-medium
                 text-amber-600 bg-amber-50 border border-amber-200
                 hover:bg-amber-100 hover:border-amber-300
                 transition-colors duration-150
               "
             >
               <PencilIcon size={11} color="#d97706" />
-              <span>Rename</span>
+              <span className="hidden sm:inline">Rename</span>
             </button>
             <button
               onClick={(e) => {
@@ -136,14 +136,14 @@ export function ItemCard({ item }: ItemCardProps) {
               title="Delete"
               aria-label="Delete"
               className="
-                flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium
+                flex items-center gap-1.5 px-1 sm:px-2 py-1 rounded-md text-[11px] font-medium
                 text-red-500 bg-red-50 border border-red-200
                 hover:bg-red-100 hover:border-red-300
                 transition-colors duration-150
               "
             >
               <TrashIcon size={11} color="#ef4444" />
-              <span>Delete</span>
+              <span className="hidden sm:inline">Delete</span>
             </button>
           </div>
         )}
