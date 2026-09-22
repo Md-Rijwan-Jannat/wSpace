@@ -9,9 +9,9 @@ Built with Next.js 16, React 19, TypeScript, and Tailwind CSS v4.
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-wSpace.vercel.app-00C7B7?style=flat-square&logo=vercel)](https://wSpace.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-wSpace.vercel.app-00C7B7?style=flat-square&logo=vercel)](https://wspace-explorer.vercel.app)
 
-### 🌐 [Live Demo → https://wSpace.vercel.app](https://wSpace.vercel.app)
+### 🌐 [Live Demo → https://wspace-explorer.vercel.app](https://wspace-explorer.vercel.app)
 
 </div>
 
@@ -69,12 +69,12 @@ The app hot-reloads automatically as you edit source files.
 
 ### Available scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start dev server on port `3000` |
-| `npm run build` | Build production bundle |
+| Command         | Description                            |
+| --------------- | -------------------------------------- |
+| `npm run dev`   | Start dev server on port `3000`        |
+| `npm run build` | Build production bundle                |
 | `npm run start` | Serve production build (after `build`) |
-| `npm run lint` | Run ESLint |
+| `npm run lint`  | Run ESLint                             |
 
 ---
 
@@ -172,16 +172,16 @@ The tree hierarchy is expressed through `parentId` references — similar to how
 
 ```ts
 // Flat map — O(1) lookups, O(n) tree builds
-type WorkspaceState = Record<string, WorkspaceItem>
+type WorkspaceState = Record<string, WorkspaceItem>;
 
 interface WorkspaceItem {
-  id: string
-  name: string
-  type: "folder" | "file"
-  parentId: string | null   // null = root-level item
-  content?: string          // only present on files
-  createdAt: number         // Unix ms timestamp
-  updatedAt: number
+  id: string;
+  name: string;
+  type: "folder" | "file";
+  parentId: string | null; // null = root-level item
+  content?: string; // only present on files
+  createdAt: number; // Unix ms timestamp
+  updatedAt: number;
 }
 ```
 
@@ -219,29 +219,29 @@ wspace_seeded_dummy_v1   → "true"             (one-time seed guard flag)
 
 ## 🔧 Key Implementation Decisions
 
-| Decision | Rationale |
-|----------|-----------|
-| **Flat map over nested tree** | O(1) item access by ID; tree is derived at render time. Avoids deep recursive mutations. |
-| **`useReducer` over `useState`** | Explicit action types make all mutations auditable and easy to debug. |
-| **Init-function pattern** | Passing the localStorage loader as the `useReducer` init argument initializes state synchronously on mount, preventing hydration mismatches with Next.js SSR. |
-| **No backend / database** | Entire app runs in the browser via `localStorage`. Zero setup, zero cost, works offline. |
-| **One-time seed guard** | `wspace_seeded_dummy_v1` key prevents re-seeding demo data on page refresh, so user edits are never overwritten. |
-| **Deterministic seed timestamps** | Seed items use a fixed baseline timestamp (`1730000000000`) instead of `Date.now()` to prevent server/client HTML mismatches during SSR. |
+| Decision                                | Rationale                                                                                                                                                                                   |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Flat map over nested tree**           | O(1) item access by ID; tree is derived at render time. Avoids deep recursive mutations.                                                                                                    |
+| **`useReducer` over `useState`**        | Explicit action types make all mutations auditable and easy to debug.                                                                                                                       |
+| **Init-function pattern**               | Passing the localStorage loader as the `useReducer` init argument initializes state synchronously on mount, preventing hydration mismatches with Next.js SSR.                               |
+| **No backend / database**               | Entire app runs in the browser via `localStorage`. Zero setup, zero cost, works offline.                                                                                                    |
+| **One-time seed guard**                 | `wspace_seeded_dummy_v1` key prevents re-seeding demo data on page refresh, so user edits are never overwritten.                                                                            |
+| **Deterministic seed timestamps**       | Seed items use a fixed baseline timestamp (`1730000000000`) instead of `Date.now()` to prevent server/client HTML mismatches during SSR.                                                    |
 | **Collapsible sidebar (all viewports)** | Instead of a mobile drawer overlay, the sidebar collapses to icon-width on mobile automatically. Users can toggle it wider; the main panel scrolls horizontally to prevent layout breakage. |
-| **`suppressHydrationWarning`** | Applied to color-coded UI elements (workspace initials, emoji) that are computed client-side from localStorage data, silencing expected SSR→CSR differences. |
+| **`suppressHydrationWarning`**          | Applied to color-coded UI elements (workspace initials, emoji) that are computed client-side from localStorage data, silencing expected SSR→CSR differences.                                |
 
 ---
 
 ## ⌨️ Keyboard Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl / ⌘ + K` | Open global search |
-| `Ctrl / ⌘ + N` | Create new folder |
-| `Ctrl / ⌘ + S` | Save file (in editor) |
-| `Escape` | Close modal / search / cancel rename |
-| `Enter` | Confirm rename |
-| `Double-click` | Rename an item inline |
+| Shortcut       | Action                               |
+| -------------- | ------------------------------------ |
+| `Ctrl / ⌘ + K` | Open global search                   |
+| `Ctrl / ⌘ + N` | Create new folder                    |
+| `Ctrl / ⌘ + S` | Save file (in editor)                |
+| `Escape`       | Close modal / search / cancel rename |
+| `Enter`        | Confirm rename                       |
+| `Double-click` | Rename an item inline                |
 
 ---
 
