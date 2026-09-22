@@ -5,10 +5,12 @@
 "use client";
 
 import { useWorkspaceContext } from "@/src/context/WorkspaceContext";
-import { WorkspaceIcon, ChevronIcon } from "@/src/_components/ui/icons/Icons";
+import { useWorkspaceManagerContext } from "@/src/context/WorkspaceManagerContext";
+import { ChevronIcon } from "@/src/_components/ui/icons/Icons";
 
 export function Breadcrumb() {
   const { breadcrumbPath, navigateToFolder } = useWorkspaceContext();
+  const { activeWorkspace } = useWorkspaceManagerContext();
 
   return (
     <nav className="flex items-center gap-1 text-[13px] min-h-[20px] flex-wrap">
@@ -20,10 +22,17 @@ export function Breadcrumb() {
           text-text-secondary hover:text-primary hover:bg-primary-subtle
           transition-colors duration-150 group
         "
+        title={`Root (${activeWorkspace?.name || "Workspace"})`}
       >
-        <WorkspaceIcon size={14} color="currentColor" />
-        <span className="relative">
-          Workspace
+        <span
+          className="w-2.5 h-2.5 rounded-full shrink-0 transition-transform group-hover:scale-125"
+          style={{
+            backgroundColor: activeWorkspace?.color || "#4c35ae",
+            boxShadow: `0 0 5px ${activeWorkspace?.color || "#4c35ae"}80`,
+          }}
+        />
+        <span className="relative font-medium text-text-primary">
+          {activeWorkspace?.name || "Workspace"}
           <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-primary group-hover:w-full transition-all duration-150" />
         </span>
       </button>

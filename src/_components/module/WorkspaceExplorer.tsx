@@ -5,8 +5,10 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
+import { WorkspaceManagerProvider, useWorkspaceManagerContext } from "@/src/context/WorkspaceManagerContext";
 import { WorkspaceProvider } from "@/src/context/WorkspaceContext";
 import { ToastProvider } from "@/src/context/ToastContext";
+import { getStorageKeyForWorkspace } from "@/src/lib/workspace-manager-utils";
 import { Sidebar } from "./Sidebar";
 import { MainPanel } from "./MainPanel";
 import { SearchOverlay } from "./SearchOverlay";
@@ -94,16 +96,27 @@ function WorkspaceShell() {
   );
 }
 
+function WorkspaceContent() {
+  const { activeWorkspaceId } = useWorkspaceManagerContext();
+  const storageKey = getStorageKeyForWorkspace(activeWorkspaceId);
+
+  return (
+    <WorkspaceProvider key={activeWorkspaceId} storageKey={storageKey}>
+      <WorkspaceShell />
+    </WorkspaceProvider>
+  );
+}
+
 /**
  * WorkspaceExplorer — Top-level component wrapped in providers.
  * This is what page.tsx renders.
  */
 export function WorkspaceExplorer() {
   return (
-    <WorkspaceProvider>
+    <WorkspaceManagerProvider>
       <ToastProvider>
-        <WorkspaceShell />
+        <WorkspaceContent />
       </ToastProvider>
-    </WorkspaceProvider>
+    </WorkspaceManagerProvider>
   );
 }

@@ -108,9 +108,9 @@ export function ItemCard({ item }: ItemCardProps) {
           </div>
         )}
 
-        {/* Action buttons — labeled pill badges, fade in on hover */}
+        {/* Action buttons — hidden on mobile, visible on hover for desktop */}
         {!isRenaming && (
-          <div className="shrink-0 flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+          <div className="hidden sm:flex shrink-0 items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-150">
             <button
               onClick={(e) => {
                 e.stopPropagation();

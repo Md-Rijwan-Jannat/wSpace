@@ -7,6 +7,7 @@
 import Image from "next/image";
 import { useWorkspaceContext } from "@/src/context/WorkspaceContext";
 import { TreeNode } from "./TreeNode";
+import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import {
   SearchIcon,
   FolderPlusIcon,
@@ -71,6 +72,9 @@ export function Sidebar({
           )}
         </button>
       </div>
+
+      {/* ── Workspace Switcher ──────────────────────────────────── */}
+      <WorkspaceSwitcher isCollapsed={isCollapsed} />
 
       {/* ── Action bar ─────────────────────────────────────────── */}
       {isCollapsed ? (

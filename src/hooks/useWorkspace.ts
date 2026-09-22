@@ -21,7 +21,7 @@ import {
   getReadablePath,
   countDescendants,
 } from "@/src/lib/workspace-utils";
-import { STORAGE_KEY, DEBOUNCE_MS, getSeedData } from "@/src/lib/constants";
+import { WORKSPACE_DATA_PREFIX, LEGACY_STORAGE_KEY, DEBOUNCE_MS, getSeedData } from "@/src/lib/constants";
 
 // ---- Reducer ---------------------------------------------------------------
 
@@ -105,7 +105,8 @@ export interface UseWorkspaceReturn {
   getItemPath: (itemId: string) => string;
 }
 
-export function useWorkspace(): UseWorkspaceReturn {
+export function useWorkspace(storageKey?: string): UseWorkspaceReturn {
+  const resolvedKey = storageKey || LEGACY_STORAGE_KEY;
   const [items, dispatch] = useReducer(workspaceReducer, {});
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const [activeFileId, setActiveFileId] = useState<string | null>(null);
@@ -122,10 +123,10 @@ export function useWorkspace(): UseWorkspaceReturn {
     if (typeof window === "undefined") return;
 
     try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored) {
+      const stored = window.localStorage.getItem(resolvedKey);
+      if (stored !== null) {
         const parsed = JSON.parse(stored) as WorkspaceState;
-        if (Object.keys(parsed).length > 0) {
+        if (parsed && typeof parsed === "object") {
           dispatch({ type: "LOAD", payload: parsed });
           isLoaded.current = true;
           return;
@@ -135,11 +136,16 @@ export function useWorkspace(): UseWorkspaceReturn {
       console.warn("[useWorkspace] Failed to load from localStorage");
     }
 
-    // First time — use seed data
+    // First time (no stored entry at all) — use seed data
     const seed = getSeedData();
     dispatch({ type: "LOAD", payload: seed });
+    try {
+      window.localStorage.setItem(resolvedKey, JSON.stringify(seed));
+    } catch {
+      // Ignore
+    }
     isLoaded.current = true;
-  }, []);
+  }, [resolvedKey]);
 
   // ---- Persist to localStorage on every state change ----------------------
   useEffect(() => {
@@ -152,7 +158,7 @@ export function useWorkspace(): UseWorkspaceReturn {
 
     saveTimeoutRef.current = setTimeout(() => {
       try {
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+        window.localStorage.setItem(resolvedKey, JSON.stringify(items));
       } catch {
         console.warn("[useWorkspace] Failed to persist to localStorage");
       }
@@ -163,7 +169,7 @@ export function useWorkspace(): UseWorkspaceReturn {
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [items]);
+  }, [items, resolvedKey]);
 
   // ---- Actions ------------------------------------------------------------
 

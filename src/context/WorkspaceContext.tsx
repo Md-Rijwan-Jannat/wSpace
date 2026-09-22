@@ -9,8 +9,14 @@ import { useWorkspace, type UseWorkspaceReturn } from "@/src/hooks/useWorkspace"
 
 const WorkspaceContext = createContext<UseWorkspaceReturn | null>(null);
 
-export function WorkspaceProvider({ children }: { children: ReactNode }) {
-  const workspace = useWorkspace();
+export function WorkspaceProvider({
+  children,
+  storageKey,
+}: {
+  children: ReactNode;
+  storageKey?: string;
+}) {
+  const workspace = useWorkspace(storageKey);
 
   return (
     <WorkspaceContext.Provider value={workspace}>

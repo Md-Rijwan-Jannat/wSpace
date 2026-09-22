@@ -4,14 +4,52 @@
 
 import type { WorkspaceState } from "@/src/types/workspace";
 
-/** localStorage key for persisting workspace data */
-export const STORAGE_KEY = "wspace-workspace-data";
+// ── Multi-Workspace Storage Keys ────────────────────────────────
+
+/** localStorage key for the workspace registry (list + active ID) */
+export const WORKSPACE_REGISTRY_KEY = "wspace-registry";
+
+/** Prefix for per-workspace item data keys: wspace-data-{workspaceId} */
+export const WORKSPACE_DATA_PREFIX = "wspace-data-";
+
+/** Legacy key — for migration from single-workspace */
+export const LEGACY_STORAGE_KEY = "wspace-workspace-data";
+
+// ── Defaults ────────────────────────────────────────────────────
+
+export const DEFAULT_WORKSPACE_NAME = "My Workspace";
+export const DEFAULT_WORKSPACE_EMOJI = "🚀";
+export const DEFAULT_WORKSPACE_COLOR = "#4c35ae";
+
+// ── Timing ──────────────────────────────────────────────────────
 
 /** Debounce delay for localStorage writes (ms) */
 export const DEBOUNCE_MS = 300;
 
 /** Debounce delay for search input (ms) */
 export const SEARCH_DEBOUNCE_MS = 250;
+
+// ── Workspace Appearance Options ────────────────────────────────
+
+export const WORKSPACE_EMOJI_OPTIONS = [
+  "🚀", "💼", "🎨", "📚", "🏠", "💡", "🔬", "🎮",
+  "🎵", "📷", "✈️", "🌿", "⚡", "🔥", "💎", "🎯",
+  "🏗️", "📦", "🌈", "⭐",
+] as const;
+
+export const WORKSPACE_COLOR_OPTIONS = [
+  { label: "Indigo",   value: "#4c35ae" },
+  { label: "Blue",     value: "#2563eb" },
+  { label: "Cyan",     value: "#0891b2" },
+  { label: "Teal",     value: "#0d9488" },
+  { label: "Emerald",  value: "#10b981" },
+  { label: "Amber",    value: "#f59e0b" },
+  { label: "Orange",   value: "#ea580c" },
+  { label: "Rose",     value: "#e11d48" },
+  { label: "Pink",     value: "#db2777" },
+  { label: "Violet",   value: "#7c3aed" },
+  { label: "Slate",    value: "#475569" },
+] as const;
 
 /**
  * Default seed workspace data for first-time users.

@@ -35,7 +35,7 @@ export function MainPanel({ isCollapsed, onToggleCollapse, onCreateFolder }: Mai
   return (
     <main className="flex-1 flex flex-col h-full overflow-hidden bg-white">
       {/* Header — toggle + breadcrumb */}
-      <div className="flex items-center h-[52px] px-6 shrink-0 border-b border-border bg-surface-secondary">
+      <div className="flex items-center h-[52px] px-4 sm:px-6 shrink-0 border-b border-border bg-surface-secondary">
         <div className="flex items-center gap-3">
           {/* Sidebar toggle */}
           <button
@@ -63,7 +63,7 @@ export function MainPanel({ isCollapsed, onToggleCollapse, onCreateFolder }: Mai
       </div>
 
       {/* Content — scrollable */}
-      <div className="flex-1 overflow-y-auto px-6 py-4">
+      <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-6">
         <ItemList onCreateFolder={onCreateFolder} />
       </div>
     </main>

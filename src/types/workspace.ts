@@ -47,3 +47,22 @@ export interface Toast {
   message: string;
   type: ToastType;
 }
+
+// ── Multi-Workspace Types ──────────────────────────────────────
+
+/** Metadata for each workspace (stored in a central registry) */
+export interface WorkspaceMeta {
+  id: string;
+  name: string;
+  emoji?: string;
+  color: string;
+  createdAt: number;
+  updatedAt: number;
+  itemCount: number;
+}
+
+/** Registry stored in localStorage */
+export interface WorkspaceRegistry {
+  workspaces: WorkspaceMeta[];
+  activeWorkspaceId: string;
+}
