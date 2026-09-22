@@ -8,6 +8,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useWorkspaceContext } from "@/src/context/WorkspaceContext";
 import { useToastContext } from "@/src/context/ToastContext";
 import { useClickOutside } from "@/src/hooks/useClickOutside";
+import { SaveIcon } from "@/src/_components/ui/icons/Icons";
 
 interface RenameInputProps {
   itemId: string;
@@ -64,26 +65,48 @@ export function RenameInput({ itemId, currentName, onClose }: RenameInputProps) 
 
   return (
     <div ref={containerRef} className="flex-1 min-w-0">
-      <input
-        ref={inputRef}
-        type="text"
-        value={name}
-        onChange={(e) => {
-          setName(e.target.value);
-          setError(null);
-        }}
-        onKeyDown={handleKeyDown}
-        onBlur={handleSubmit}
-        className={`
-          w-full px-2 py-1 rounded text-sm
-          border bg-white text-text-primary
-          focus:outline-none focus:ring-2 transition-all duration-150
-          ${error
-            ? "border-danger focus:ring-danger/20"
-            : "border-primary focus:ring-primary/20"
-          }
-        `}
-      />
+      <div className="flex items-center gap-1">
+        {/* Text input */}
+        <input
+          ref={inputRef}
+          type="text"
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+            setError(null);
+          }}
+          onKeyDown={handleKeyDown}
+          onBlur={handleSubmit}
+          className={`
+            flex-1 min-w-0 h-6 px-2 rounded text-[13px]
+            border bg-white text-text-primary
+            outline-none transition-colors duration-150
+            ${error
+              ? "border-danger/60 focus:border-danger"
+              : "border-primary/40 focus:border-primary/50"
+            }
+          `}
+        />
+         {/* Save checkmark button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSubmit();
+          }}
+          title="Save rename"
+          aria-label="Save rename"
+          className="
+            shrink-0 flex items-center justify-center
+            w-6 h-6 rounded
+            bg-primary text-white
+            hover:bg-primary-hover
+            active:scale-95
+            transition-all duration-150
+          "
+        >
+          <SaveIcon size={12} color="white" />
+        </button>
+      </div>
       {error && (
         <p className="text-[11px] text-danger mt-0.5 animate-slide-down">{error}</p>
       )}

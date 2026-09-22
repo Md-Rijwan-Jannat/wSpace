@@ -122,10 +122,10 @@ function CreateItemDialogContent({
               w-full pl-10 pr-3.5 py-2 rounded-md text-sm
               border bg-white text-text-primary
               placeholder:text-text-muted
-              focus:outline-none focus:ring-2 transition-all duration-150
+              outline-none transition-colors duration-150
               ${error
-                ? "border-danger focus:ring-danger/20"
-                : "border-border focus:border-primary focus:ring-primary/20"
+                ? "border-danger/60 focus:border-danger"
+                : "border-border focus:border-primary/40"
               }
             `}
             autoComplete="off"

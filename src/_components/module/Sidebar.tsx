@@ -9,87 +9,113 @@ import { useWorkspaceContext } from "@/src/context/WorkspaceContext";
 import { TreeNode } from "./TreeNode";
 import {
   SearchIcon,
-  CloseIcon,
   FolderPlusIcon,
   FilePlusIcon,
 } from "@/src/_components/ui/icons/Icons";
 
 interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isCollapsed: boolean;
   onSearchOpen: () => void;
   onCreateFolder: () => void;
   onCreateFile: () => void;
 }
 
 export function Sidebar({
-  isOpen,
-  onClose,
+  isCollapsed,
   onSearchOpen,
   onCreateFolder,
   onCreateFile,
 }: SidebarProps) {
-  const { treeData, navigateToFolder, breadcrumbPath } =
-    useWorkspaceContext();
+  const { treeData, navigateToFolder, breadcrumbPath } = useWorkspaceContext();
 
-  // Current location label for bottom bar
   const locationLabel =
     breadcrumbPath.length > 0
       ? breadcrumbPath[breadcrumbPath.length - 1].name
       : "Workspace";
 
   return (
-    <>
-      {/* Mobile backdrop */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 z-30 lg:hidden animate-fade-in"
-          onClick={onClose}
-        />
-      )}
-
-      {/* Sidebar panel */}
-      <aside
+    <aside
+      className={`
+        relative h-full bg-surface-secondary border-r border-border
+        flex flex-col shrink-0
+        transition-all duration-300 ease-out
+        ${isCollapsed ? "w-[60px]" : "w-[272px]"}
+      `}
+    >
+      {/* ── Header ─────────────────────────────────────────────── */}
+      <div
         className={`
-          fixed lg:relative z-40 top-0 left-0 h-full
-          w-[280px] bg-surface-secondary border-r border-border
-          flex flex-col shrink-0
-          transition-transform duration-300 ease-out
-          ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+          flex items-center h-[52px] shrink-0
+          border-b border-border
+          ${isCollapsed ? "justify-center px-2" : "px-3.5"}
         `}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3.5 border-b border-border">
-          <button
-            onClick={() => navigateToFolder(null)}
-            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
-          >
-            <Image
-              src="/images/wSpace.png"
-              alt="wSpace logo"
-              width={32}
-              height={32}
-              className="rounded-md"
-              priority
-            />
-            <span className="text-[18px] font-bold text-text-primary tracking-tight">
+        {/* Logo + text */}
+        <button
+          onClick={() => navigateToFolder(null)}
+          className="flex items-center gap-2.5 hover:opacity-80 transition-opacity min-w-0"
+          title="Go to workspace root"
+        >
+          <Image
+            src="/images/wSpace.png"
+            alt="wSpace logo"
+            width={32}
+            height={32}
+            className="rounded-md shrink-0"
+            priority
+          />
+          {!isCollapsed && (
+            <span className="text-[17px] font-bold text-text-primary tracking-tight truncate">
               wSpace
             </span>
-          </button>
+          )}
+        </button>
+      </div>
 
-          {/* Close button (mobile only) */}
+      {/* ── Action bar ─────────────────────────────────────────── */}
+      {isCollapsed ? (
+        /* Collapsed: vertical icon stack */
+        <div className="flex flex-col items-center gap-1 py-3 px-2 border-b border-border">
           <button
-            onClick={onClose}
-            className="lg:hidden p-1.5 rounded-md hover:bg-surface-hover transition-colors"
-            aria-label="Close sidebar"
+            onClick={onSearchOpen}
+            className="
+              w-9 h-9 flex items-center justify-center rounded-md
+              text-text-muted hover:text-primary hover:bg-primary-subtle
+              transition-colors duration-150
+            "
+            title="Search (⌘K)"
+            aria-label="Search"
           >
-            <CloseIcon size={18} />
+            <SearchIcon size={16} color="currentColor" />
+          </button>
+          <button
+            onClick={onCreateFolder}
+            className="
+              w-9 h-9 flex items-center justify-center rounded-md
+              text-text-muted hover:text-primary hover:bg-primary-subtle
+              active:scale-90 transition-all duration-150
+            "
+            title="New Folder"
+            aria-label="New Folder"
+          >
+            <FolderPlusIcon size={16} color="currentColor" />
+          </button>
+          <button
+            onClick={onCreateFile}
+            className="
+              w-9 h-9 flex items-center justify-center rounded-md
+              text-text-muted hover:text-[#3b82f6] hover:bg-[#eff6ff]
+              active:scale-90 transition-all duration-150
+            "
+            title="New File"
+            aria-label="New File"
+          >
+            <FilePlusIcon size={16} color="currentColor" />
           </button>
         </div>
-
-        {/* Action bar — Search + Create icons */}
-        <div className="flex items-center gap-1.5 px-3 py-2.5">
-          {/* Search trigger — takes most space */}
+      ) : (
+        /* Expanded: search bar + icon buttons in one row */
+        <div className="flex items-center gap-1.5 px-3 py-2.5 border-b border-border">
           <button
             onClick={onSearchOpen}
             className="
@@ -99,89 +125,95 @@ export function Sidebar({
               transition-colors duration-150
             "
           >
-            <SearchIcon size={14} color="#94a3b8" />
+            <SearchIcon size={13} color="#94a3b8" />
             <span>Search...</span>
             <kbd className="ml-auto text-[9px] font-mono text-text-muted bg-surface-secondary px-1 py-[1px] rounded border border-border-light">
               ⌘K
             </kbd>
           </button>
 
-          {/* New Folder — icon button */}
           <button
             onClick={onCreateFolder}
             className="
-              shrink-0 p-[7px] rounded-md
+              shrink-0 w-[30px] h-[30px] flex items-center justify-center rounded-md
               border border-border bg-surface
               hover:bg-primary-subtle hover:border-primary/30
-              active:scale-[0.93]
-              transition-all duration-150
-              group
+              active:scale-90 transition-all duration-150 group
             "
             title="New Folder"
             aria-label="New Folder"
           >
             <FolderPlusIcon
-              size={16}
+              size={14}
               color="#4c35ae"
               className="group-hover:scale-110 transition-transform duration-150"
             />
           </button>
 
-          {/* New File — icon button */}
           <button
             onClick={onCreateFile}
             className="
-              shrink-0 p-[7px] rounded-md
+              shrink-0 w-[30px] h-[30px] flex items-center justify-center rounded-md
               border border-border bg-surface
               hover:bg-[#eff6ff] hover:border-[#3b82f6]/30
-              active:scale-[0.93]
-              transition-all duration-150
-              group
+              active:scale-90 transition-all duration-150 group
             "
             title="New File"
             aria-label="New File"
           >
             <FilePlusIcon
-              size={16}
+              size={14}
               color="#3b82f6"
               className="group-hover:scale-110 transition-transform duration-150"
             />
           </button>
         </div>
+      )}
 
-        {/* Explorer label */}
-        <div className="px-4 pt-1 pb-1.5">
+      {/* ── Explorer label (expanded only) ──────────────────────── */}
+      {!isCollapsed && (
+        <div className="px-4 pt-2.5 pb-1">
           <span className="text-[10px] font-semibold text-text-muted uppercase tracking-wider">
             Explorer
           </span>
         </div>
+      )}
 
-        {/* Tree view */}
-        <nav className="flex-1 overflow-y-auto px-2 pb-4">
-          {treeData.length > 0 ? (
-            treeData.map((node) => (
-              <TreeNode key={node.item.id} node={node} depth={0} />
-            ))
-          ) : (
-            <div className="flex flex-col items-center py-8 px-4">
-              <p className="text-xs text-text-muted text-center mb-3">
-                No items yet
-              </p>
+      {/* ── Tree view ───────────────────────────────────────────── */}
+      <nav className={`flex-1 overflow-y-auto pb-4 ${isCollapsed ? "px-1.5 pt-2" : "px-2"}`}>
+        {treeData.length > 0 ? (
+          treeData.map((node) => (
+            <TreeNode key={node.item.id} node={node} depth={0} isCollapsed={isCollapsed} />
+          ))
+        ) : (
+          <div className={`flex flex-col items-center py-6 ${isCollapsed ? "px-1" : "px-3"}`}>
+            {!isCollapsed ? (
+              <>
+                <p className="text-xs text-text-muted text-center mb-2">No items yet</p>
+                <button
+                  onClick={onCreateFolder}
+                  className="text-xs text-primary font-medium hover:underline transition-all"
+                >
+                  + Create your first folder
+                </button>
+              </>
+            ) : (
               <button
                 onClick={onCreateFolder}
-                className="
-                  text-xs text-primary font-medium
-                  hover:underline transition-all
-                "
+                className="w-9 h-9 flex items-center justify-center rounded-md hover:bg-primary-subtle transition-colors"
+                title="Create folder"
+                aria-label="Create folder"
               >
-                + Create your first folder
+                <FolderPlusIcon size={16} color="#4c35ae" />
               </button>
-            </div>
-          )}
-        </nav>
+            )}
+          </div>
+        )}
+      </nav>
 
-        {/* Bottom status bar */}
-        <div className="px-4 py-2.5 border-t border-border bg-surface-secondary">
+      {/* ── Bottom bar (expanded only) ─────────────────────────── */}
+      {!isCollapsed && (
+        <div className="px-4 py-2.5 border-t border-border">
           <div className="flex items-center justify-between">
             <span className="text-[10px] text-text-muted truncate max-w-[140px]">
               📍 {locationLabel}
@@ -191,7 +223,7 @@ export function Sidebar({
             </span>
           </div>
         </div>
-      </aside>
-    </>
+      )}
+    </aside>
   );
 }

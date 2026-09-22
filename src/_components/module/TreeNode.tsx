@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// TreeNode.tsx — Recursive tree node for sidebar
+// TreeNode.tsx — Recursive tree node with connecting lines
 // ---------------------------------------------------------------------------
 
 "use client";
@@ -13,9 +13,18 @@ import { resolveFileIcon } from "@/src/lib/icon-resolver";
 interface TreeNodeProps {
   node: TreeNodeData;
   depth: number;
+  isCollapsed?: boolean;
+  isLast?: boolean;
+  parentLines?: boolean[];
 }
 
-export function TreeNode({ node, depth }: TreeNodeProps) {
+export function TreeNode({
+  node,
+  depth,
+  isCollapsed = false,
+  isLast = true,
+  parentLines = [],
+}: TreeNodeProps) {
   const { selectedFolderId, activeFileId, navigateToFolder, openFile } =
     useWorkspaceContext();
 
@@ -30,9 +39,8 @@ export function TreeNode({ node, depth }: TreeNodeProps) {
   const handleClick = useCallback(() => {
     if (isFolder) {
       navigateToFolder(node.item.id);
-      setIsExpanded(true);
+      setIsExpanded((prev) => !prev);
     } else {
-      // Navigate to parent folder and open file
       navigateToFolder(node.item.parentId);
       openFile(node.item.id);
     }
@@ -46,8 +54,10 @@ export function TreeNode({ node, depth }: TreeNodeProps) {
     []
   );
 
-  // Resolve icon for files
   const fileIcon = !isFolder ? resolveFileIcon(node.item.name) : null;
+
+  // Tree line width per depth level
+  const lineIndent = 20;
 
   return (
     <div>
@@ -55,56 +65,88 @@ export function TreeNode({ node, depth }: TreeNodeProps) {
       <button
         onClick={handleClick}
         className={`
-          w-full flex items-center gap-1.5 py-[6px] pr-3 text-left text-[13px]
-          rounded cursor-pointer group transition-all duration-150
+          w-full flex items-center gap-0 text-left text-[13px]
+          cursor-pointer select-none group relative
+          transition-colors duration-100 mt-[1px]
+          ${isCollapsed ? "justify-center py-[5px] px-2" : "py-[5px] pr-3"}
           ${isSelected
-            ? "bg-primary-light text-primary font-medium border-l-[3px] border-primary"
-            : "text-text-primary hover:bg-surface-hover border-l-[3px] border-transparent"
+            ? "bg-[#ede9fe] text-[#4c35ae] font-medium"
+            : "text-text-primary hover:bg-surface-hover"
           }
         `}
-        style={{ paddingLeft: `${depth * 16 + 8}px` }}
-        title={node.item.name}
+        style={isCollapsed ? {} : { paddingLeft: `${depth * lineIndent + 8}px` }}
+        title={isCollapsed ? node.item.name : undefined}
       >
+        {/* Tree lines (expanded mode only) */}
+        {!isCollapsed && depth > 0 && (
+          <span className="absolute top-0 bottom-0 pointer-events-none" style={{ left: 0 }}>
+            {parentLines.map((hasLine, i) => (
+              <span
+                key={i}
+                className="absolute top-0 bottom-0 w-px bg-border-light"
+                style={{ left: `${i * lineIndent + lineIndent / 2 + 8}px` }}
+              />
+            ))}
+            {/* Horizontal connector line */}
+            <span
+              className="absolute top-[14px] h-px bg-border-light"
+              style={{
+                left: `${(depth - 1) * lineIndent + lineIndent / 2 + 8}px`,
+                width: `${lineIndent / 2}px`,
+              }}
+            />
+          </span>
+        )}
+
         {/* Chevron (folders only) */}
-        {isFolder ? (
+        {!isCollapsed && (
           <span
             onClick={handleChevronClick}
             className={`
-              shrink-0 flex items-center justify-center w-4 h-4
-              transition-transform duration-200
+              shrink-0 flex items-center justify-center w-4 h-4 mr-0.5
+              transition-transform duration-150
               ${isExpanded ? "rotate-90" : "rotate-0"}
+              ${!hasChildren && isFolder ? "invisible" : ""}
             `}
           >
-            {hasChildren && (
-              <ChevronIcon size={12} color={isSelected ? "#4c35ae" : "#94a3b8"} />
-            )}
+            <ChevronIcon
+              size={11}
+              color={isSelected ? "#4c35ae" : "#94a3b8"}
+            />
           </span>
-        ) : (
-          <span className="shrink-0 w-4 h-4" />
         )}
 
         {/* Icon */}
-        <span className="shrink-0 flex items-center">
+        <span className="shrink-0 flex items-center mr-1.5">
           {isFolder ? (
             isExpanded ? (
-              <FolderOpenIcon size={16} />
+              <FolderOpenIcon size={15} />
             ) : (
-              <FolderIcon size={16} />
+              <FolderIcon size={15} />
             )
           ) : (
-            fileIcon && <fileIcon.component size={16} color={fileIcon.color} />
+            fileIcon && <fileIcon.component size={14} color={fileIcon.color} />
           )}
         </span>
 
         {/* Name */}
-        <span className="truncate">{node.item.name}</span>
+        {!isCollapsed && (
+          <span className="truncate select-none">{node.item.name}</span>
+        )}
       </button>
 
-      {/* Children (expanded folders only) */}
-      {isFolder && isExpanded && hasChildren && (
-        <div className="animate-expand">
-          {node.children.map((child) => (
-            <TreeNode key={child.item.id} node={child} depth={depth + 1} />
+      {/* Children */}
+      {isFolder && isExpanded && hasChildren && !isCollapsed && (
+        <div>
+          {node.children.map((child, index) => (
+            <TreeNode
+              key={child.item.id}
+              node={child}
+              depth={depth + 1}
+              isCollapsed={isCollapsed}
+              isLast={index === node.children.length - 1}
+              parentLines={[...parentLines, !isLast]}
+            />
           ))}
         </div>
       )}

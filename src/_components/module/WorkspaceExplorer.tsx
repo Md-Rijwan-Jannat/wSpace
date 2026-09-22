@@ -5,25 +5,25 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { WorkspaceProvider, useWorkspaceContext } from "@/src/context/WorkspaceContext";
+import { WorkspaceProvider } from "@/src/context/WorkspaceContext";
 import { ToastProvider } from "@/src/context/ToastContext";
 import { Sidebar } from "./Sidebar";
 import { MainPanel } from "./MainPanel";
 import { SearchOverlay } from "./SearchOverlay";
 import { CreateItemDialog } from "./CreateItemDialog";
 import { useKeyboard } from "@/src/hooks/useKeyboard";
-import { MenuIcon } from "@/src/_components/ui/icons/Icons";
 
 function WorkspaceShell() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return !window.matchMedia("(min-width: 1024px)").matches;
+  });
   const [searchOpen, setSearchOpen] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [createDialogType, setCreateDialogType] = useState<"folder" | "file">("folder");
-  const { navigateToFolder } = useWorkspaceContext();
 
   const handleSearchOpen = useCallback(() => {
     setSearchOpen(true);
-    setSidebarOpen(false);
   }, []);
 
   const handleSearchClose = useCallback(() => {
@@ -44,6 +44,10 @@ function WorkspaceShell() {
     setCreateDialogOpen(false);
   }, []);
 
+  const handleToggleSidebar = useCallback(() => {
+    setSidebarCollapsed((prev) => !prev);
+  }, []);
+
   // Global keyboard shortcuts
   const shortcuts = useMemo(
     () => ({
@@ -61,8 +65,7 @@ function WorkspaceShell() {
     <div className="flex h-screen w-full overflow-hidden bg-surface">
       {/* Sidebar */}
       <Sidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
+        isCollapsed={sidebarCollapsed}
         onSearchOpen={handleSearchOpen}
         onCreateFolder={handleCreateFolder}
         onCreateFile={handleCreateFile}
@@ -70,27 +73,11 @@ function WorkspaceShell() {
 
       {/* Main area */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Mobile header */}
-        <div className="lg:hidden flex items-center gap-3 px-4 py-3 border-b border-border bg-surface">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-1.5 rounded-md hover:bg-surface-hover transition-colors"
-            aria-label="Open sidebar"
-          >
-            <MenuIcon size={22} />
-          </button>
-          <button
-            onClick={() => navigateToFolder(null)}
-            className="text-[15px] font-bold text-text-primary tracking-tight"
-          >
-            wSpace
-          </button>
-        </div>
-
         {/* Main panel */}
         <MainPanel
+          isCollapsed={sidebarCollapsed}
+          onToggleCollapse={handleToggleSidebar}
           onCreateFolder={handleCreateFolder}
-          onCreateFile={handleCreateFile}
         />
       </div>
 

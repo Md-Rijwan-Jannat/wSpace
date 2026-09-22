@@ -87,7 +87,7 @@ export function FileEditor() {
     <>
       <div className="flex flex-col h-full">
         {/* Header bar */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-border bg-surface shrink-0">
+        <div className="flex items-center h-[52px] px-4 shrink-0 border-b border-border bg-surface">
           {/* Back button */}
           <button
             onClick={handleBack}
@@ -152,8 +152,8 @@ export function FileEditor() {
               border border-border-light bg-surface-secondary
               text-sm text-text-primary leading-relaxed
               font-mono placeholder:text-text-muted
-              focus:outline-none focus:border-primary/30 focus:shadow-[inset_0_1px_4px_rgba(0,0,0,0.04)]
-              transition-all duration-150
+              outline-none focus:border-primary/40
+              transition-colors duration-150
             "
             spellCheck={false}
           />

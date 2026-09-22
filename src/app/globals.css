@@ -28,6 +28,24 @@
   box-sizing: border-box;
 }
 
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+a,
+select,
+summary {
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+[role="button"][aria-disabled="true"],
+.disabled {
+  cursor: not-allowed;
+}
+
 body {
   background: var(--color-surface);
   color: var(--color-text-primary);
@@ -134,10 +152,24 @@ body {
 
 /* ---- Focus ---------------------------------------------------------------- */
 
-*:focus-visible {
-  outline: 2px solid var(--color-primary);
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid rgba(76, 53, 174, 0.4);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+input,
+textarea {
+  outline: none;
+}
+
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* ---- Selection ----------------------------------------------------------- */

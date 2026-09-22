@@ -72,12 +72,11 @@ export function ItemCard({ item }: ItemCardProps) {
       <div
         onClick={handleClick}
         className="
-          flex items-center gap-3 px-3 py-2.5 rounded-md cursor-pointer
+          group flex items-center gap-3 px-3 py-2.5 rounded-md cursor-pointer select-none
           border border-transparent
           hover:bg-surface-hover hover:border-border-light
-          hover:shadow-[0_1px_3px_rgba(0,0,0,0.04)]
-          hover:-translate-y-[1px]
-          transition-all duration-150 group
+          hover:shadow-[0_1px_4px_rgba(0,0,0,0.06)]
+          transition-all duration-150
         "
       >
         {/* Icon */}
@@ -98,7 +97,7 @@ export function ItemCard({ item }: ItemCardProps) {
           />
         ) : (
           <div className="flex-1 min-w-0" onDoubleClick={handleDoubleClick}>
-            <p className="text-sm font-medium text-text-primary truncate">
+            <p className="text-sm font-medium text-text-primary truncate leading-tight">
               {item.name}
             </p>
             <p className="text-[11px] text-text-muted mt-0.5">
@@ -109,30 +108,42 @@ export function ItemCard({ item }: ItemCardProps) {
           </div>
         )}
 
-        {/* Action buttons (visible on hover) */}
+        {/* Action buttons — labeled pill badges, fade in on hover */}
         {!isRenaming && (
-          <div className="shrink-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+          <div className="shrink-0 flex items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-150">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setIsRenaming(true);
               }}
-              className="p-1.5 rounded hover:bg-[#fef3c7] transition-colors"
               title="Rename"
               aria-label="Rename"
+              className="
+                flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium
+                text-amber-600 bg-amber-50 border border-amber-200
+                hover:bg-amber-100 hover:border-amber-300
+                transition-colors duration-150
+              "
             >
-              <PencilIcon size={14} />
+              <PencilIcon size={11} color="#d97706" />
+              <span>Rename</span>
             </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setShowDeleteModal(true);
               }}
-              className="p-1.5 rounded hover:bg-danger-light transition-colors"
               title="Delete"
               aria-label="Delete"
+              className="
+                flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-medium
+                text-red-500 bg-red-50 border border-red-200
+                hover:bg-red-100 hover:border-red-300
+                transition-colors duration-150
+              "
             >
-              <TrashIcon size={14} />
+              <TrashIcon size={11} color="#ef4444" />
+              <span>Delete</span>
             </button>
           </div>
         )}
@@ -140,35 +151,39 @@ export function ItemCard({ item }: ItemCardProps) {
 
       {/* Delete confirmation modal */}
       <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
-        <div className="p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-danger-light flex items-center justify-center">
-              <TrashIcon size={20} color="#ef4444" />
+        <div className="p-5">
+          {/* Header */}
+          <div className="flex items-start gap-3 mb-4">
+            <div className="w-9 h-9 rounded-md bg-red-50 flex items-center justify-center shrink-0">
+              <TrashIcon size={17} color="#ef4444" />
             </div>
             <div>
-              <h3 className="text-base font-semibold text-text-primary">
+              <h3 className="text-sm font-semibold text-text-primary leading-tight">
                 Delete {isFolder ? "Folder" : "File"}
               </h3>
-              <p className="text-sm text-text-secondary mt-0.5">
+              <p className="text-xs text-text-muted mt-0.5">
                 This action cannot be undone.
               </p>
             </div>
           </div>
 
-          <p className="text-sm text-text-secondary mb-6">
+          {/* Body */}
+          <p className="text-sm text-text-secondary mb-5">
             Are you sure you want to delete{" "}
-            <strong className="text-text-primary">{item.name}</strong>
+            <span className="font-semibold text-text-primary">&rdquo;{item.name}&#34;</span>
             {isFolder && descendantCount > 0
               ? ` and all its ${descendantCount} item${descendantCount !== 1 ? "s" : ""}?`
               : "?"}
           </p>
 
+          {/* Actions */}
           <div className="flex justify-end gap-2">
             <button
               onClick={() => setShowDeleteModal(false)}
               className="
                 px-3.5 py-1.5 rounded-md text-sm font-medium
-                text-text-secondary hover:bg-surface-hover
+                text-text-secondary bg-surface-secondary
+                hover:bg-surface-hover border border-border
                 transition-colors duration-150
               "
             >
@@ -178,7 +193,7 @@ export function ItemCard({ item }: ItemCardProps) {
               onClick={handleDelete}
               className="
                 px-4 py-1.5 rounded-md text-sm font-medium
-                bg-danger text-white
+                bg-red-500 text-white
                 hover:bg-red-600 active:scale-[0.97]
                 transition-all duration-150
               "

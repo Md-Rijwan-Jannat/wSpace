@@ -9,16 +9,17 @@ import { Breadcrumb } from "./Breadcrumb";
 import { ItemList } from "./ItemList";
 import { FileEditor } from "./FileEditor";
 import {
-  FolderPlusIcon,
-  FilePlusIcon,
+  SidebarToggleLeftIcon,
+  SidebarToggleRightIcon,
 } from "@/src/_components/ui/icons/Icons";
 
 interface MainPanelProps {
+  isCollapsed: boolean;
+  onToggleCollapse: () => void;
   onCreateFolder: () => void;
-  onCreateFile: () => void;
 }
 
-export function MainPanel({ onCreateFolder, onCreateFile }: MainPanelProps) {
+export function MainPanel({ isCollapsed, onToggleCollapse, onCreateFolder }: MainPanelProps) {
   const { activeFileId } = useWorkspaceContext();
 
   // If a file is open, show the editor full-screen in the panel
@@ -33,41 +34,30 @@ export function MainPanel({ onCreateFolder, onCreateFile }: MainPanelProps) {
   // Default: folder view with breadcrumb + item list
   return (
     <main className="flex-1 flex flex-col h-full overflow-hidden bg-white">
-      {/* Header — breadcrumb + actions */}
-      <div className="px-6 pt-4 pb-3 border-b border-border bg-surface shrink-0">
-        <div className="flex items-center justify-between gap-4">
-          {/* Left: breadcrumb */}
+      {/* Header — toggle + breadcrumb */}
+      <div className="flex items-center h-[52px] px-6 shrink-0 border-b border-border bg-surface-secondary">
+        <div className="flex items-center gap-3">
+          {/* Sidebar toggle */}
+          <button
+            onClick={onToggleCollapse}
+            className="
+              shrink-0 p-1.5 rounded-md
+              text-text-muted hover:text-text-primary
+              hover:bg-surface-hover transition-colors
+            "
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isCollapsed ? (
+              <SidebarToggleRightIcon size={22} />
+            ) : (
+              <SidebarToggleLeftIcon size={22} />
+            )}
+          </button>
+
+          {/* Breadcrumb */}
           <div className="flex-1 min-w-0">
             <Breadcrumb />
-          </div>
-
-          {/* Right: action buttons */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            <button
-              onClick={onCreateFolder}
-              className="
-                inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[12px] font-medium
-                text-text-secondary bg-surface-secondary border border-border
-                hover:bg-primary-subtle hover:border-primary/30 hover:text-primary
-                active:scale-[0.97] transition-all duration-150
-              "
-            >
-              <FolderPlusIcon size={14} color="currentColor" />
-              <span className="hidden sm:inline">New Folder</span>
-            </button>
-
-            <button
-              onClick={onCreateFile}
-              className="
-                inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[12px] font-medium
-                text-text-secondary bg-surface-secondary border border-border
-                hover:bg-[#eff6ff] hover:border-[#3b82f6]/30 hover:text-[#3b82f6]
-                active:scale-[0.97] transition-all duration-150
-              "
-            >
-              <FilePlusIcon size={14} color="currentColor" />
-              <span className="hidden sm:inline">New File</span>
-            </button>
           </div>
         </div>
       </div>

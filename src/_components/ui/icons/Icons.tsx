@@ -184,6 +184,42 @@ export function ChevronIcon({
   );
 }
 
+// ---- Chevron Double Left — Collapse Sidebar --------------------------------
+
+export function ChevronDoubleLeftIcon({
+  size = 16,
+  color = "#64748b",
+  className,
+  ...props
+}: IconProps & { color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+    >
+      <path
+        d="M11 6L6 12L11 18"
+        stroke={color}
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M18 6L13 12L18 18"
+        stroke={color}
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 // ---- Search ---------------------------------------------------------------
 
 export function SearchIcon({ size = 20, color = "#94a3b8", ...props }: IconProps & { color?: string }) {
@@ -323,6 +359,124 @@ export function EmptyFolderIllustration({ size = 120, ...props }: IconProps) {
       {/* Plus circle */}
       <circle cx="95" cy="85" r="14" fill="#4c35ae" opacity="0.9" />
       <path d="M95 79V91M89 85H101" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+// ---- Panel Left Close — Collapse Sidebar ----------------------------------
+
+export function PanelLeftCloseIcon({
+  size = 20,
+  color = "#64748b",
+  className,
+  ...props
+}: IconProps & { color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+    >
+      {/* Outer frame */}
+      <rect x="2" y="3" width="20" height="18" rx="2.5" stroke={color} strokeWidth="1.5" />
+      {/* Sidebar panel (left) */}
+      <rect x="4" y="5.5" width="5" height="13" rx="1" fill={color} opacity="0.18" />
+      <rect x="4" y="5.5" width="5" height="13" rx="1" stroke={color} strokeWidth="1.2" />
+      {/* Content lines (right) */}
+      <line x1="11.5" y1="8" x2="18" y2="8" stroke={color} strokeWidth="1.3" strokeLinecap="round" />
+      <line x1="11.5" y1="11" x2="16" y2="11" stroke={color} strokeWidth="1.3" strokeLinecap="round" />
+      <line x1="11.5" y1="14" x2="17" y2="14" stroke={color} strokeWidth="1.3" strokeLinecap="round" />
+      {/* Arrow left (collapse indicator) */}
+      <path d="M10 9.5L8 12L10 14.5" stroke={color} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// ---- Panel Left Open — Expand Sidebar -------------------------------------
+
+export function PanelLeftOpenIcon({
+  size = 20,
+  color = "#64748b",
+  className,
+  ...props
+}: IconProps & { color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+    >
+      {/* Outer frame */}
+      <rect x="2" y="3" width="20" height="18" rx="2.5" stroke={color} strokeWidth="1.5" />
+      {/* Sidebar panel (left, wider) */}
+      <rect x="4" y="5.5" width="8" height="13" rx="1" fill={color} opacity="0.18" />
+      <rect x="4" y="5.5" width="8" height="13" rx="1" stroke={color} strokeWidth="1.2" />
+      {/* Content lines (right) */}
+      <line x1="14.5" y1="8" x2="18" y2="8" stroke={color} strokeWidth="1.3" strokeLinecap="round" />
+      <line x1="14.5" y1="11" x2="17" y2="11" stroke={color} strokeWidth="1.3" strokeLinecap="round" />
+      <line x1="14.5" y1="14" x2="18" y2="14" stroke={color} strokeWidth="1.3" strokeLinecap="round" />
+      {/* Arrow right (expand indicator) */}
+      <path d="M14 9.5L16 12L14 14.5" stroke={color} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// ---- Sidebar Toggle Left — Collapse ----------------------------------------
+
+export function SidebarToggleLeftIcon({
+  size = 20,
+  color = "#64748b",
+  className,
+  ...props
+}: IconProps & { color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+    >
+      <rect x="3" y="4" width="18" height="16" rx="2.5" stroke={color} strokeWidth="1.5" />
+      <rect x="5" y="6.5" width="5" height="11" rx="1" fill={color} opacity="0.2" />
+      <rect x="5" y="6.5" width="5" height="11" rx="1" stroke={color} strokeWidth="1.2" />
+      <path d="M15 10L12.5 12.5L15 15" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// ---- Sidebar Toggle Right — Expand -----------------------------------------
+
+export function SidebarToggleRightIcon({
+  size = 20,
+  color = "#64748b",
+  className,
+  ...props
+}: IconProps & { color?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+    >
+      <rect x="3" y="4" width="18" height="16" rx="2.5" stroke={color} strokeWidth="1.5" />
+      <rect x="5" y="6.5" width="8" height="11" rx="1" fill={color} opacity="0.2" />
+      <rect x="5" y="6.5" width="8" height="11" rx="1" stroke={color} strokeWidth="1.2" />
+      <path d="M15 10L17.5 12.5L15 15" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
