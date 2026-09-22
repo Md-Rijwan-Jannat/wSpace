@@ -16,7 +16,7 @@ export function MainPanel() {
   if (activeFileId) {
     return (
       <main className="flex-1 flex flex-col h-full overflow-hidden bg-white">
-        <FileEditor />
+        <FileEditor key={activeFileId} />
       </main>
     );
   }

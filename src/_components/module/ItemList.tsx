@@ -9,7 +9,7 @@ import { useWorkspaceContext } from "@/src/context/WorkspaceContext";
 import { ItemCard } from "./ItemCard";
 import { CreateItemForm } from "./CreateItemForm";
 import { EmptyState } from "./EmptyState";
-import { FolderIcon, FileTextIcon, PlusIcon } from "@/src/_components/ui/icons/Icons";
+import { FolderIcon, FileTextIcon } from "@/src/_components/ui/icons/Icons";
 
 export function ItemList() {
   const { currentChildren, selectedFolderId } = useWorkspaceContext();

@@ -4,7 +4,7 @@
 
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useWorkspaceContext } from "@/src/context/WorkspaceContext";
 import { useToastContext } from "@/src/context/ToastContext";
 import { Modal } from "@/src/_components/ui/shared/Modal";
@@ -17,29 +17,22 @@ export function FileEditor() {
   const { showToast } = useToastContext();
 
   const file = activeFileId ? items[activeFileId] : null;
+  const initialContent = file?.content ?? "";
 
-  const [content, setContent] = useState("");
-  const [savedContent, setSavedContent] = useState("");
+  // State initialised from file — component is keyed by activeFileId
+  // so it remounts when the file changes (no setState-in-effect needed)
+  const [content, setContent] = useState(initialContent);
+  const [savedContent, setSavedContent] = useState(initialContent);
   const [showUnsavedModal, setShowUnsavedModal] = useState(false);
-  const [pendingAction, setPendingAction] = useState<"close" | null>(null);
   const [justSaved, setJustSaved] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const isDirty = content !== savedContent;
 
-  // Load file content when file changes
-  useEffect(() => {
-    if (file) {
-      const fileContent = file.content ?? "";
-      setContent(fileContent);
-      setSavedContent(fileContent);
-    }
-  }, [file]);
-
   // Focus textarea on mount
   useEffect(() => {
     textareaRef.current?.focus();
-  }, [activeFileId]);
+  }, []);
 
   const handleSave = useCallback(() => {
     if (!activeFileId) return;
@@ -54,7 +47,6 @@ export function FileEditor() {
 
   const handleBack = useCallback(() => {
     if (isDirty) {
-      setPendingAction("close");
       setShowUnsavedModal(true);
     } else {
       closeFile();
