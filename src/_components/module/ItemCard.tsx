@@ -72,7 +72,7 @@ export function ItemCard({ item }: ItemCardProps) {
       <div
         onClick={handleClick}
         className="
-          flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer
+          flex items-center gap-3 px-3 py-2.5 rounded-md cursor-pointer
           border border-transparent
           hover:bg-surface-hover hover:border-border-light
           hover:shadow-[0_1px_3px_rgba(0,0,0,0.04)]
@@ -81,7 +81,7 @@ export function ItemCard({ item }: ItemCardProps) {
         "
       >
         {/* Icon */}
-        <span className="shrink-0 flex items-center justify-center w-8 h-8 rounded-lg bg-surface-secondary">
+        <span className="shrink-0 flex items-center justify-center w-8 h-8 rounded-md bg-surface-secondary">
           {isFolder ? (
             <FolderIcon size={18} color="#4c35ae" />
           ) : (
@@ -117,7 +117,7 @@ export function ItemCard({ item }: ItemCardProps) {
                 e.stopPropagation();
                 setIsRenaming(true);
               }}
-              className="p-1.5 rounded-md hover:bg-[#fef3c7] transition-colors"
+              className="p-1.5 rounded hover:bg-[#fef3c7] transition-colors"
               title="Rename"
               aria-label="Rename"
             >
@@ -128,7 +128,7 @@ export function ItemCard({ item }: ItemCardProps) {
                 e.stopPropagation();
                 setShowDeleteModal(true);
               }}
-              className="p-1.5 rounded-md hover:bg-danger-light transition-colors"
+              className="p-1.5 rounded hover:bg-danger-light transition-colors"
               title="Delete"
               aria-label="Delete"
             >
@@ -167,7 +167,7 @@ export function ItemCard({ item }: ItemCardProps) {
             <button
               onClick={() => setShowDeleteModal(false)}
               className="
-                px-4 py-2 rounded-lg text-sm font-medium
+                px-3.5 py-1.5 rounded-md text-sm font-medium
                 text-text-secondary hover:bg-surface-hover
                 transition-colors duration-150
               "
@@ -177,7 +177,7 @@ export function ItemCard({ item }: ItemCardProps) {
             <button
               onClick={handleDelete}
               className="
-                px-4 py-2 rounded-lg text-sm font-medium
+                px-4 py-1.5 rounded-md text-sm font-medium
                 bg-danger text-white
                 hover:bg-red-600 active:scale-[0.97]
                 transition-all duration-150

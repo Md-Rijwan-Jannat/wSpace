@@ -24,7 +24,7 @@ export function EmptyState({ title, description, actionLabel, onAction }: EmptyS
         <button
           onClick={onAction}
           className="
-            inline-flex items-center gap-2 px-5 py-2.5 rounded-lg
+            inline-flex items-center gap-2 px-4 py-2 rounded-md
             bg-primary text-white text-sm font-medium
             hover:bg-primary-hover active:scale-[0.97]
             transition-all duration-150

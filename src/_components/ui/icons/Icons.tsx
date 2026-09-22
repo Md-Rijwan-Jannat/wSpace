@@ -30,6 +30,56 @@ export function FolderIcon({ size = 20, color = "#4c35ae", ...props }: IconProps
   );
 }
 
+// ---- Folder Plus — Create Folder Icon -------------------------------------
+
+export function FolderPlusIcon({ size = 20, color = "#4c35ae", ...props }: IconProps & { color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M2 6C2 4.89543 2.89543 4 4 4H9L11 6H20C21.1046 6 22 6.89543 22 8V18C22 19.1046 21.1046 20 20 20H4C2.89543 20 2 19.1046 2 18V6Z"
+        fill={color}
+        opacity={0.15}
+      />
+      <path
+        d="M2 6C2 4.89543 2.89543 4 4 4H9L11 6H20C21.1046 6 22 6.89543 22 8V18C22 19.1046 21.1046 20 20 20H4C2.89543 20 2 19.1046 2 18V6Z"
+        stroke={color}
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      {/* Plus design */}
+      <line x1="12" y1="10" x2="12" y2="16" stroke={color} strokeWidth={2} strokeLinecap="round" />
+      <line x1="9" y1="13" x2="15" y2="13" stroke={color} strokeWidth={2} strokeLinecap="round" />
+    </svg>
+  );
+}
+
+// ---- File Plus — Create File Icon -----------------------------------------
+
+export function FilePlusIcon({ size = 20, color = "#3b82f6", ...props }: IconProps & { color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z"
+        fill={color}
+        opacity={0.12}
+      />
+      <path
+        d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z"
+        stroke={color}
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M14 2V8H20" stroke={color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+      {/* Plus design */}
+      <line x1="12" y1="11.5" x2="12" y2="17.5" stroke={color} strokeWidth={2} strokeLinecap="round" />
+      <line x1="9" y1="14.5" x2="15" y2="14.5" stroke={color} strokeWidth={2} strokeLinecap="round" />
+    </svg>
+  );
+}
+
 // ---- Folder (Open) — Lighter Purple ---------------------------------------
 
 export function FolderOpenIcon({ size = 20, color = "#6d5cc5", ...props }: IconProps & { color?: string }) {

@@ -56,7 +56,7 @@ export function TreeNode({ node, depth }: TreeNodeProps) {
         onClick={handleClick}
         className={`
           w-full flex items-center gap-1.5 py-[6px] pr-3 text-left text-[13px]
-          rounded-md cursor-pointer group transition-all duration-150
+          rounded cursor-pointer group transition-all duration-150
           ${isSelected
             ? "bg-primary-light text-primary font-medium border-l-[3px] border-primary"
             : "text-text-primary hover:bg-surface-hover border-l-[3px] border-transparent"

@@ -148,7 +148,7 @@ export function FileEditor() {
             onChange={(e) => setContent(e.target.value)}
             placeholder="Start typing..."
             className="
-              w-full h-full resize-none p-4 rounded-lg
+              w-full h-full resize-none p-4 rounded-md
               border border-border-light bg-surface-secondary
               text-sm text-text-primary leading-relaxed
               font-mono placeholder:text-text-muted
@@ -189,7 +189,7 @@ export function FileEditor() {
             <button
               onClick={() => setShowUnsavedModal(false)}
               className="
-                px-4 py-2 rounded-lg text-sm font-medium
+                px-3.5 py-1.5 rounded-md text-sm font-medium
                 text-text-secondary hover:bg-surface-hover
                 transition-colors
               "
@@ -199,7 +199,7 @@ export function FileEditor() {
             <button
               onClick={handleDiscard}
               className="
-                px-4 py-2 rounded-lg text-sm font-medium
+                px-3.5 py-1.5 rounded-md text-sm font-medium
                 text-danger hover:bg-danger-light
                 transition-colors
               "
@@ -209,7 +209,7 @@ export function FileEditor() {
             <button
               onClick={handleSaveAndLeave}
               className="
-                px-4 py-2 rounded-lg text-sm font-medium
+                px-4 py-1.5 rounded-md text-sm font-medium
                 bg-primary text-white hover:bg-primary-hover
                 active:scale-[0.97] transition-all duration-150
               "

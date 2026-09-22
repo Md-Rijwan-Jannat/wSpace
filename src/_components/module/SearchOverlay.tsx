@@ -77,7 +77,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
       {/* Search panel */}
       <div className="relative z-10 w-full max-w-xl mx-auto mt-[15vh] animate-scale-in">
-        <div className="bg-white rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.12)] overflow-hidden border border-border">
+        <div className="bg-white rounded-lg shadow-[0_8px_24px_rgba(0,0,0,0.12)] overflow-hidden border border-border">
           {/* Search input */}
           <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
             <SearchIcon size={18} color="#4c35ae" />

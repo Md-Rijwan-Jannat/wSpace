@@ -52,7 +52,7 @@ function ToastContainer({
         <div
           key={toast.id}
           className={`
-            pointer-events-auto flex items-center gap-3 rounded-lg px-4 py-3 shadow-lg
+            pointer-events-auto flex items-center gap-3 rounded-md px-3.5 py-2.5 shadow-md
             text-sm font-medium animate-slide-in-right min-w-[280px] max-w-[400px]
             ${toast.type === "success" ? "bg-[#ecfdf5] text-[#065f46] border border-[#a7f3d0]" : ""}
             ${toast.type === "error" ? "bg-[#fef2f2] text-[#991b1b] border border-[#fecaca]" : ""}

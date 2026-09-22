@@ -10,12 +10,15 @@ import { ToastProvider } from "@/src/context/ToastContext";
 import { Sidebar } from "./Sidebar";
 import { MainPanel } from "./MainPanel";
 import { SearchOverlay } from "./SearchOverlay";
+import { CreateItemDialog } from "./CreateItemDialog";
 import { useKeyboard } from "@/src/hooks/useKeyboard";
 import { MenuIcon } from "@/src/_components/ui/icons/Icons";
 
 function WorkspaceShell() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [createDialogType, setCreateDialogType] = useState<"folder" | "file">("folder");
   const { navigateToFolder } = useWorkspaceContext();
 
   const handleSearchOpen = useCallback(() => {
@@ -27,10 +30,28 @@ function WorkspaceShell() {
     setSearchOpen(false);
   }, []);
 
+  const handleCreateFolder = useCallback(() => {
+    setCreateDialogType("folder");
+    setCreateDialogOpen(true);
+  }, []);
+
+  const handleCreateFile = useCallback(() => {
+    setCreateDialogType("file");
+    setCreateDialogOpen(true);
+  }, []);
+
+  const handleCloseDialog = useCallback(() => {
+    setCreateDialogOpen(false);
+  }, []);
+
   // Global keyboard shortcuts
   const shortcuts = useMemo(
     () => ({
       "mod+k": () => setSearchOpen((prev) => !prev),
+      "mod+n": () => {
+        setCreateDialogType("folder");
+        setCreateDialogOpen(true);
+      },
     }),
     []
   );
@@ -43,6 +64,8 @@ function WorkspaceShell() {
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         onSearchOpen={handleSearchOpen}
+        onCreateFolder={handleCreateFolder}
+        onCreateFile={handleCreateFile}
       />
 
       {/* Main area */}
@@ -65,11 +88,21 @@ function WorkspaceShell() {
         </div>
 
         {/* Main panel */}
-        <MainPanel />
+        <MainPanel
+          onCreateFolder={handleCreateFolder}
+          onCreateFile={handleCreateFile}
+        />
       </div>
 
       {/* Search overlay (command palette) */}
       <SearchOverlay isOpen={searchOpen} onClose={handleSearchClose} />
+
+      {/* Create item dialog modal */}
+      <CreateItemDialog
+        isOpen={createDialogOpen}
+        onClose={handleCloseDialog}
+        initialType={createDialogType}
+      />
     </div>
   );
 }

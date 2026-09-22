@@ -52,7 +52,7 @@ export function Modal({ isOpen, onClose, children }: ModalProps) {
       {/* Modal card */}
       <div
         ref={modalRef}
-        className="relative z-10 w-full max-w-md mx-4 bg-white rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.12)] animate-scale-in"
+        className="relative z-10 w-full max-w-md mx-4 bg-white rounded-lg shadow-[0_8px_24px_rgba(0,0,0,0.12)] overflow-hidden animate-scale-in"
         role="dialog"
         aria-modal="true"
       >
