@@ -116,51 +116,39 @@ export function WorkspaceSwitcher({ isCollapsed }: WorkspaceSwitcherProps) {
             title={`Current workspace: ${currentWorkspace?.name || "Workspace"} (Click to switch)`}
             aria-label="Switch workspace"
             className="
-              relative w-9 h-9 rounded-full flex items-center justify-center text-white
-              font-bold text-sm shadow-sm transition-all duration-150 hover:scale-108 active:scale-95
+              w-7 h-7 rounded-full flex items-center justify-center text-white
+              font-semibold text-[11px] shadow-2xs transition-transform hover:scale-105 active:scale-95
             "
-            style={{
-              backgroundColor: currentWorkspace?.color || "#4c35ae",
-              boxShadow: `0 2px 8px ${currentWorkspace?.color || "#4c35ae"}45`,
-            }}
+            style={{ backgroundColor: currentWorkspace?.color || "#4c35ae" }}
           >
             {initialLetter}
           </button>
         </div>
       ) : (
-        <div className="px-3 py-2 border-b border-border">
+        <div className="px-2.5 py-1.5 border-b border-border">
           <button
             onClick={() => setIsOpen((prev) => !prev)}
             aria-expanded={isOpen}
             className="
-              w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg
-              bg-surface hover:bg-surface-hover/80 border border-border hover:border-border/80
-              transition-all duration-150 group text-left shadow-xs
+              w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-lg
+              hover:bg-surface-hover text-left transition-colors duration-150 group
             "
           >
-            <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
               <span
-                className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-white font-bold text-xs shadow-xs transition-transform group-hover:scale-105"
-                style={{
-                  backgroundColor: currentWorkspace?.color || "#4c35ae",
-                  boxShadow: `0 2px 6px ${currentWorkspace?.color || "#4c35ae"}35`,
-                }}
+                className="w-5 h-5 rounded-full shrink-0 flex items-center justify-center text-white font-semibold text-[10px]"
+                style={{ backgroundColor: currentWorkspace?.color || "#4c35ae" }}
               >
                 {initialLetter}
               </span>
-              <div className="min-w-0">
-                <p className="text-[13px] font-semibold text-text-primary truncate leading-tight">
-                  {currentWorkspace?.name || "My Workspace"}
-                </p>
-                <p className="text-[11px] text-text-muted leading-tight">
-                  {currentWorkspace?.itemCount ?? 0} {currentWorkspace?.itemCount === 1 ? "item" : "items"}
-                </p>
-              </div>
+              <span className="text-[13px] font-semibold text-text-primary truncate">
+                {currentWorkspace?.name || "My Workspace"}
+              </span>
             </div>
 
-            <span className="text-text-muted group-hover:text-text-primary">
+            <span className="text-text-muted group-hover:text-text-primary shrink-0">
               <ChevronIcon
-                size={14}
+                size={12}
                 className={`transition-transform duration-200 ${isOpen ? "rotate-90" : ""}`}
               />
             </span>
@@ -172,21 +160,21 @@ export function WorkspaceSwitcher({ isCollapsed }: WorkspaceSwitcherProps) {
       {isOpen && (
         <div
           className={`
-            absolute z-50 bg-surface rounded-xl shadow-xl border border-border
+            absolute z-50 bg-surface rounded-xl shadow-lg border border-border
             p-1.5 animate-in fade-in zoom-in-95 duration-150
             ${
               isCollapsed
-                ? "left-[64px] top-2 w-[260px]"
-                : "left-3 right-3 top-full mt-1 max-w-[calc(100%-24px)]"
+                ? "left-[64px] top-2 w-[240px]"
+                : "left-2.5 right-2.5 top-full mt-1 max-w-[calc(100%-20px)]"
             }
           `}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-3 py-1.5 pb-2 border-b border-border-light">
-            <span className="text-[11px] font-semibold text-text-muted uppercase tracking-wider">
+          <div className="flex items-center justify-between px-2.5 py-1 pb-1.5 border-b border-border-light">
+            <span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">
               Workspaces
             </span>
-            <span className="text-[11px] font-medium text-text-muted bg-surface-secondary px-1.5 py-0.5 rounded">
+            <span className="text-[11px] text-text-muted">
               {workspaces.length}
             </span>
           </div>
@@ -207,20 +195,21 @@ export function WorkspaceSwitcher({ isCollapsed }: WorkspaceSwitcherProps) {
           </div>
 
           {/* New Workspace Button */}
-          <div className="pt-1 border-t border-border-light">
+          <div className="pt-1 mt-1 border-t border-border-light">
             <button
               onClick={() => {
                 setIsOpen(false);
                 setCreateDialogOpen(true);
               }}
               className="
-                w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg
-                text-[12.5px] font-medium text-primary bg-primary-subtle/60
-                hover:bg-primary-subtle border border-primary/20
-                hover:border-primary/40 active:scale-98 transition-all
+                w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg
+                text-[12.5px] font-medium text-text-secondary hover:text-text-primary
+                hover:bg-surface-hover transition-colors
               "
             >
-              <PlusIcon size={14} color="#4c35ae" />
+              <span className="w-5 h-5 rounded-full border border-dashed border-text-muted/60 flex items-center justify-center text-text-muted shrink-0">
+                <PlusIcon size={11} color="currentColor" />
+              </span>
               <span>New Workspace</span>
             </button>
           </div>

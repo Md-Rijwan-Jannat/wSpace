@@ -4,7 +4,7 @@
 
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { WorkspaceManagerProvider, useWorkspaceManagerContext } from "@/src/context/WorkspaceManagerContext";
 import { WorkspaceProvider } from "@/src/context/WorkspaceContext";
 import { ToastProvider } from "@/src/context/ToastContext";
@@ -16,13 +16,18 @@ import { CreateItemDialog } from "./CreateItemDialog";
 import { useKeyboard } from "@/src/hooks/useKeyboard";
 
 function WorkspaceShell() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return !window.matchMedia("(min-width: 1024px)").matches;
-  });
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [createDialogType, setCreateDialogType] = useState<"folder" | "file">("folder");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    if (window.innerWidth < 1024) {
+      setSidebarCollapsed(true);
+    }
+  }, []);
 
   const handleSearchOpen = useCallback(() => {
     setSearchOpen(true);

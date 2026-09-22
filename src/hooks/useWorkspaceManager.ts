@@ -16,6 +16,7 @@ import {
 import {
   DEFAULT_WORKSPACE_EMOJI,
   DEFAULT_WORKSPACE_COLOR,
+  DEFAULT_WORKSPACE_NAME,
 } from "@/src/lib/constants";
 
 export interface UseWorkspaceManagerReturn {
@@ -40,10 +41,22 @@ export interface UseWorkspaceManagerReturn {
   refreshItemCounts: () => void;
 }
 
+const INITIAL_WORKSPACE: WorkspaceMeta = {
+  id: "default-workspace",
+  name: DEFAULT_WORKSPACE_NAME,
+  color: DEFAULT_WORKSPACE_COLOR,
+  createdAt: 0,
+  updatedAt: 0,
+  itemCount: 0,
+};
+
+const INITIAL_REGISTRY: WorkspaceRegistry = {
+  workspaces: [INITIAL_WORKSPACE],
+  activeWorkspaceId: "default-workspace",
+};
+
 export function useWorkspaceManager(): UseWorkspaceManagerReturn {
-  const [registry, setRegistry] = useState<WorkspaceRegistry>(() => {
-    return loadRegistry();
-  });
+  const [registry, setRegistry] = useState<WorkspaceRegistry>(INITIAL_REGISTRY);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load / sync on mount
