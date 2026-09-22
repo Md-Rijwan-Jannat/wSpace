@@ -110,7 +110,7 @@ export function ItemCard({ item }: ItemCardProps) {
 
         {/* Action buttons — hidden on mobile, visible on hover for desktop */}
         {!isRenaming && (
-          <div className="hidden sm:flex shrink-0 items-center gap-1 ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+          <div className="flex shrink-0 items-center gap-1 ml-auto sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-150">
             <button
               onClick={(e) => {
                 e.stopPropagation();

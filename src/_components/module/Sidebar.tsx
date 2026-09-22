@@ -67,9 +67,9 @@ export function Sidebar({
             priority
           />
           {!isCollapsed && (
-            <span className="text-[17px] font-bold text-text-primary tracking-tight truncate">
-              wSpace
-            </span>
+            <span className="text-[17px] font-bold tracking-tight truncate">
+                <span className="text-indigo-600">w</span><span className="text-text-primary">Space</span>
+              </span>
           )}
         </button>
       </div>

@@ -170,7 +170,7 @@ export function WorkspaceCard({
       {!isEditing && (
         <div className="flex items-center gap-1 shrink-0">
           {/* Quick Action buttons (visible on hover) */}
-          <div className="opacity-0 group-hover:opacity-100 flex items-center gap-0.5 transition-opacity">
+          <div className="flex items-center gap-0.5 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
             <button
               onClick={(e) => {
                 e.stopPropagation();
